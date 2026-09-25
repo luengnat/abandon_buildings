@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ค้นหาและติดตามโครงการรัฐที่สร้างค้าง ทิ้งร้าง หรือสร้างแล้วใช้ประโยชน์ไม่เต็มที่ พร้อมแผนที่ แหล่งข่าว และข้อมูลจัดซื้อจัดจ้าง"
+    />
+    <meta name="theme-color" content="#192522" />
+    <title>รอยต่อ — แผนที่โครงการรัฐที่ถูกทิ้งไว้</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Noto+Serif+Thai:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+      defer
+    ></script>
+    <script src="./app.js" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#directory">ข้ามไปยังรายการโครงการ</a>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a class="brand" href="./" aria-label="รอยต่อ หน้าหลัก">
+          <span class="brand-mark" aria-hidden="true">ร</span>
+          <span class="brand-name">รอยต่อ<span> / PUBLIC ASSET WATCH</span></span>
+        </a>
+        <a class="about-link" href="#about">วิธีอ่านฐานข้อมูล <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> ฐานข้อมูลเพื่อการตรวจสอบสาธารณะ</p>
+          <h1 id="page-title">สิ่งปลูกสร้างของรัฐ<br /><em>ที่ถูกทิ้งไว้</em></h1>
+          <p class="intro-deck">
+            ค้นโครงการ ดูตำแหน่ง และย้อนกลับไปยังหลักฐานต้นทาง
+            แยกสิ่งที่ยืนยันได้ออกจากข้อกล่าวอ้างและจุดที่ยังต้องตรวจต่อ
+          </p>
+        </div>
+        <div class="intro-note">
+          <div class="note-index">FIELD NOTE <span>25 / 09 / 69</span></div>
+          <p>แสดงเฉพาะอาคารและสิ่งปลูกสร้างที่สร้างค้าง ทิ้งร้าง หรือใช้ประโยชน์ไม่ได้</p>
+          <p class="note-small">ไม่รวมระบบรถไฟ ยานพาหนะ/เรือ และระเบียนที่เป็นคดีล้วน ๆ; หมุดประมาณระดับพื้นที่จะระบุแยกจากพิกัดอาคาร</p>
+          <div class="note-rule"><span></span><span></span><span></span></div>
+        </div>
+        <div class="intro-index" aria-hidden="true">TH<br />↘</div>
+      </section>
+
+      <section class="stats-band" aria-label="ภาพรวมฐานข้อมูล">
+        <div class="stat-cell stat-lead">
+          <span class="stat-label">อาคาร / สิ่งปลูกสร้าง</span>
+          <strong id="stat-total">—</strong>
+          <span>รายการในขอบเขตเว็บ</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">ตำแหน่งบนแผนที่</span>
+          <strong id="stat-mapped">—</strong>
+          <span>พิกัดฐาน + จุดศูนย์กลางพื้นที่</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">โครงการมีภาพประกอบ</span>
+          <strong id="stat-photos">—</strong>
+          <span>มีภาพข่าวพร้อมเครดิตต้นทาง</span>
+        </div>
+        <div class="stat-source">
+          <span class="source-stamp">ข้อมูลต้นทาง</span>
+          <span>ฐานข้อมูลโครงการร้าง<br />ปรับปรุงล่าสุด <b id="updated-at">—</b></span>
+        </div>
+        <p class="scope-note" id="scope-note">กำลังจัดขอบเขตและตำแหน่ง…</p>
+      </section>
+
+      <section class="workspace" aria-label="ค้นหาและดูแผนที่โครงการ">
+        <div class="directory" id="directory">
+          <div class="directory-heading">
+            <div>
+              <p class="eyebrow eyebrow-dark">THE REGISTER <span>PUBLIC STRUCTURES</span></p>
+              <h2>ค้นในทะเบียน</h2>
+            </div>
+            <span class="result-count" id="result-count">กำลังโหลด…</span>
+          </div>
+
+          <form class="filters" id="filters" role="search">
+            <label class="search-box" for="search-input">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <span class="sr-only">ค้นชื่อ สถานที่ หน่วยงาน หรือเลข e-GP</span>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="ชื่อโครงการ จังหวัด หน่วยงาน เลข e-GP…"
+                autocomplete="off"
+              />
+              <kbd>/</kbd>
+            </label>
+            <div class="filter-row">
+              <label class="select-wrap">
+                <span>จังหวัด</span>
+                <select id="province-filter" aria-label="กรองตามจังหวัด">
+                  <option value="">ทุกจังหวัด</option>
+                </select>
+              </label>
+              <label class="select-wrap">
+                <span>หมวดงาน</span>
+                <select id="sector-filter" aria-label="กรองตามหมวดงาน">
+                  <option value="">ทุกหมวด</option>
+                </select>
+              </label>
+            </div>
+            <div class="filter-row filter-row-bottom">
+              <label class="select-wrap select-wide">
+                <span>สถานะหลักฐาน</span>
+                <select id="status-filter" aria-label="กรองตามสถานะหลักฐาน">
+                  <option value="">ทุกสถานะ</option>
+                  <option value="unbuilt">ก่อสร้างค้าง / ทิ้งงาน</option>
+                  <option value="unused">สร้างแล้วแต่ใช้ไม่ได้ / ใช้น้อย</option>
+                  <option value="repair">กำลังซ่อมหรืออยู่ระหว่างแก้ไข</option>
+                  <option value="candidate">candidate — ต้องตรวจต่อ</option>
+                  <option value="alias">รวม alias / รายการกักกัน</option>
+                </select>
+              </label>
+              <label class="check-filter">
+                <input type="checkbox" id="photo-filter" />
+                <span>มีภาพ</span>
+              </label>
+            </div>
+          </form>
+
+          <div class="list-toolbar">
+            <span id="list-caption">รายการเรียงตามความเกี่ยวข้อง</span>
+            <div class="list-tools">
+              <label class="sort-control" for="sort-filter">
+                <span>เรียง</span>
+                <select id="sort-filter" aria-label="เรียงรายการโครงการ">
+                  <option value="recent">รหัสรายการสูง → ต่ำ</option>
+                  <option value="photos">มีภาพก่อน</option>
+                  <option value="name">ชื่อโครงการ ก–ฮ</option>
+                </select>
+              </label>
+              <button type="button" class="clear-button" id="clear-filters">ล้างตัวกรอง</button>
+            </div>
+          </div>
+          <div class="project-list" id="project-list" aria-live="polite" aria-busy="true">
+            <div class="loading-card"><span class="loading-dot"></span> กำลังอ่านทะเบียนโครงการ…</div>
+          </div>
+          <div class="list-end" id="list-end"></div>
+        </div>
+
+        <aside class="map-column" aria-label="แผนที่และรายละเอียด">
+          <div class="map-shell">
+            <div class="map-topline">
+              <div>
+                <p class="eyebrow eyebrow-dark">LOCATION INDEX <span>THAILAND</span></p>
+                <h2>แผนที่ตำแหน่ง</h2>
+              </div>
+              <button class="map-reset" type="button" id="map-reset" title="แสดงภาพรวมแผนที่">
+                <span aria-hidden="true">⤢</span> ภาพรวม
+              </button>
+            </div>
+            <div class="map-frame">
+              <div id="map" role="application" aria-label="แผนที่ตำแหน่งโครงการที่มีพิกัด"></div>
+              <div class="map-loading" id="map-loading">รอแผนที่…</div>
+              <div class="map-overlay-label">โครงการที่ปักตำแหน่งได้ <b id="map-point-count">—</b></div>
+            </div>
+            <div class="map-legend">
+              <span><i class="legend-dot legend-record"></i> พิกัดในระเบียน</span>
+              <span><i class="legend-dot legend-area"></i> ศูนย์กลางตำบล/อำเภอ/จังหวัด</span>
+              <span><i class="legend-dot legend-check"></i> พิกัดมีข้อควรระวัง</span>
+              <span class="legend-note">หมุดประมาณไม่ใช่พิกัดอาคาร</span>
+              <a class="legend-source" href="https://gis-portal.disaster.go.th/arcgis/rest/services/MapDX/DPM_TH_Boundary/FeatureServer/3" target="_blank" rel="noopener noreferrer">ที่มาจุดศูนย์กลาง: ปภ. ↗</a>
+            </div>
+          </div>
+
+          <section class="detail-card" id="detail-card" aria-live="polite">
+            <div class="detail-empty">
+              <span class="detail-number">02</span>
+              <p class="eyebrow eyebrow-dark">PROJECT FILE</p>
+              <h3>เลือกรายการเพื่อดูหลักฐาน</h3>
+              <p>กดการ์ดในทะเบียนหรือหมุดบนแผนที่เพื่อเปิดรายละเอียด งบประมาณ และลิงก์ต้นทาง</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="method" id="about">
+        <div class="method-title">
+          <span class="method-no">03</span>
+          <p class="eyebrow eyebrow-dark">READ THE MAP</p>
+          <h2>หมุดไม่ใช่<br />คำตัดสิน</h2>
+        </div>
+        <div class="method-copy">
+          <p>แต่ละรายการมีระดับความเชื่อมั่นและแหล่งอ้างอิงไม่เท่ากัน คำว่า “ร้าง” ในข่าวอาจหมายถึงสร้างไม่เสร็จ ไม่เคยเปิด ใช้งานไม่เต็มที่ หรือเป็นทรัพย์สินที่ถูกสำรวจว่าไม่ได้ใช้ประโยชน์—เว็บจะแสดงสถานะจากระเบียนเดิม ไม่รวมทุกกรณีเป็นข้อสรุปเดียว</p>
+          <p>หมุดจากระเบียนและ e-GP แยกจากหมุดประมาณซึ่งเป็นศูนย์กลางพื้นที่ปกครอง ไม่ใช่ตำแหน่งอาคารหรือแปลงที่ดินจริง รายการไม่มี ID จะไม่แสดงในเว็บ แต่ยังเก็บไว้ในฐานต้นทาง ส่วนรถไฟ ยานพาหนะ/เรือ คดีล้วน ๆ เหตุอุบัติเหตุ และโครงการที่ไม่เคยเริ่มก่อสร้างจะไม่รวมในรายการหลัก</p>
+          <a href="https://github.com/luengnat/abandon_buildings#readme" class="method-link">อ่านวิธีเก็บข้อมูลและเกณฑ์หลักฐาน <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="method-side">แหล่งภาพมีเครดิต<br />และลิงก์กลับไปยังผู้เผยแพร่</div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="footer-brand">รอยต่อ / PUBLIC ASSET WATCH</span>
+      <span>แผนที่นี้เป็นเครื่องมือค้นข้อมูล ไม่ใช่การยืนยันความผิดหรือการประเมินความเสียหาย</span>
+      <a href="./database.json">เปิดข้อมูลต้นทาง <span aria-hidden="true">↗</span></a>
+    </footer>
+
+    <noscript>เว็บไซต์นี้ต้องเปิดใช้ JavaScript เพื่อค้นและแสดงข้อมูลจากฐานทะเบียน</noscript>
+  </body>
+</html>
