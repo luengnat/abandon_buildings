@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ค้นหาและติดตามโครงการรัฐที่สร้างค้าง ทิ้งร้าง หรือสร้างแล้วใช้ประโยชน์ไม่เต็มที่ พร้อมแผนที่ แหล่งข่าว และข้อมูลจัดซื้อจัดจ้าง"
+    />
+    <meta name="theme-color" content="#192522" />
+    <title>รอยต่อ — แผนที่โครงการรัฐที่ถูกทิ้งไว้</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Noto+Serif+Thai:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./styles.css?v=20260929-r3" />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+      defer
+    ></script>
+    <script src="./app.js?v=20260930-r2" type="module"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#directory">ข้ามไปยังรายการโครงการ</a>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a class="brand" href="./" aria-label="รอยต่อ หน้าหลัก">
+          <span class="brand-mark" aria-hidden="true">ร</span>
+          <span class="brand-name">รอยต่อ<span> / PUBLIC ASSET WATCH</span></span>
+        </a>
+        <a class="about-link" href="#about">วิธีอ่านฐานข้อมูล <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> ฐานข้อมูลเพื่อการตรวจสอบสาธารณะ</p>
+          <h1 id="page-title">สิ่งปลูกสร้างของรัฐ<br /><em>ที่ถูกทิ้งไว้</em></h1>
+          <p class="intro-deck">
+            ค้นโครงการ ดูตำแหน่ง และย้อนกลับไปยังหลักฐานต้นทาง
+            แยกสิ่งที่ยืนยันได้ออกจากข้อกล่าวอ้างและจุดที่ยังต้องตรวจต่อ
+          </p>
+        </div>
+        <div class="intro-note">
+          <div class="note-index">FIELD NOTE <span>30 / 09 / 69</span></div>
+          <p>แสดงเฉพาะอาคารและสิ่งปลูกสร้างที่สร้างค้าง ทิ้งร้าง หรือใช้ประโยชน์ไม่ได้</p>
+          <p class="note-small">ไม่รวมระบบรถไฟ ยานพาหนะ/เรือ และระเบียนที่เป็นคดีล้วน ๆ; หมุดประมาณระดับพื้นที่จะระบุแยกจากพิกัดอาคาร</p>
+          <div class="note-rule"><span></span><span></span><span></span></div>
+        </div>
+        <div class="intro-index" aria-hidden="true">TH<br />↘</div>
+      </section>
+
+      <section class="stats-band" aria-label="ภาพรวมฐานข้อมูล">
+        <div class="stat-cell stat-lead">
+          <span class="stat-label">อาคาร / สิ่งปลูกสร้าง</span>
+          <strong id="stat-total">—</strong>
+          <span>รายการในขอบเขตเว็บ</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">ตำแหน่งบนแผนที่</span>
+          <strong id="stat-mapped">—</strong>
+          <span>พิกัดฐาน + จุดศูนย์กลางพื้นที่</span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">โครงการมีภาพประกอบ</span>
+          <strong id="stat-photos">—</strong>
+          <span>มีภาพข่าวพร้อมเครดิตต้นทาง</span>
+        </div>
+        <div class="stat-source">
+          <span class="source-stamp">ข้อมูลต้นทาง</span>
+          <span>ฐานข้อมูลโครงการร้าง<br />ปรับปรุงล่าสุด <b id="updated-at">—</b></span>
+        </div>
+        <p class="scope-note" id="scope-note">กำลังจัดขอบเขตและตำแหน่ง…</p>
+      </section>
+
+      <aside class="source-brief" aria-labelledby="trang-brief-title">
+        <div class="source-brief-label">
+          <p class="eyebrow eyebrow-dark">SOURCE CHECK</p>
+          <span>บทความ 28 ธ.ค. 2567 · ทวนสถานะ 30 ก.ย. 2569</span>
+        </div>
+        <div class="source-brief-copy">
+          <h2 id="trang-brief-title">23 โครงการ ไม่ใช่ 23 อาคารร้าง</h2>
+          <p><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar</a> รายงานตัวเลข 23 โครงการและวงเงินงบประมาณ 2,496 ล้านบาท โดยอ้าง ผอ.ป.ป.ช.ตรัง; เนื้อหายังถ่ายทอดข้อสังเกตของเครือข่ายภาคประชาชน ซึ่งไม่ใช่ข้อยุติของหน่วยงาน. จำนวนนี้ไม่เท่ากับ 23 อาคารที่ยืนยันว่าร้างหรือยอดความเสียหาย และ ป.ป.ช.ระบุว่า ณ วันที่รายงานยังไม่พบหลักฐานเจ้าหน้าที่รัฐทุจริต</p>
+        </div>
+        <a class="source-brief-link" href="#trang-spacebar-review">ดู 4 กรณีอาคารและสถานะที่ตรวจทานแล้ว <span aria-hidden="true">↘</span></a>
+      </aside>
+
+      <section class="workspace" aria-label="ค้นหาและดูแผนที่โครงการ">
+        <div class="directory" id="directory">
+          <div class="directory-heading">
+            <div>
+              <p class="eyebrow eyebrow-dark">THE REGISTER <span>PUBLIC STRUCTURES</span></p>
+              <h2>ค้นในทะเบียน</h2>
+            </div>
+            <span class="result-count" id="result-count">กำลังโหลด…</span>
+          </div>
+
+          <form class="filters" id="filters" role="search">
+            <label class="search-box" for="search-input">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <span class="sr-only">ค้นชื่อ สถานที่ หน่วยงาน หรือเลข e-GP</span>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="ชื่อโครงการ จังหวัด หน่วยงาน เลข e-GP…"
+                autocomplete="off"
+              />
+              <kbd>/</kbd>
+            </label>
+            <div class="filter-row">
+              <label class="select-wrap">
+                <span>จังหวัด</span>
+                <select id="province-filter" aria-label="กรองตามจังหวัด">
+                  <option value="">ทุกจังหวัด</option>
+                </select>
+              </label>
+              <label class="select-wrap">
+                <span>หมวดงาน</span>
+                <select id="sector-filter" aria-label="กรองตามหมวดงาน">
+                  <option value="">ทุกหมวด</option>
+                </select>
+              </label>
+            </div>
+            <div class="filter-row filter-row-bottom">
+              <label class="select-wrap select-wide">
+                <span>สถานะหลักฐาน</span>
+                <select id="status-filter" aria-label="กรองตามสถานะหลักฐาน">
+                  <option value="">ทุกสถานะ</option>
+                  <option value="unbuilt">ก่อสร้างค้าง / ทิ้งงาน</option>
+                  <option value="unused">สร้างแล้วแต่ใช้ไม่ได้ / ใช้น้อย</option>
+                  <option value="repair">กำลังซ่อมหรืออยู่ระหว่างแก้ไข</option>
+                  <option value="resolved">ปัจจุบันไม่เข้าข่ายทิ้งร้าง</option>
+                  <option value="candidate">candidate — ต้องตรวจต่อ</option>
+                  <option value="alias">รวม alias / รายการกักกัน</option>
+                </select>
+              </label>
+              <label class="check-filter">
+                <input type="checkbox" id="photo-filter" />
+                <span>มีภาพ</span>
+              </label>
+            </div>
+          </form>
+
+          <div class="list-toolbar">
+            <span id="list-caption">รายการเรียงตามความเกี่ยวข้อง</span>
+            <div class="list-tools">
+              <label class="sort-control" for="sort-filter">
+                <span>เรียง</span>
+                <select id="sort-filter" aria-label="เรียงรายการโครงการ">
+                  <option value="recent">รหัสรายการสูง → ต่ำ</option>
+                  <option value="photos">มีภาพก่อน</option>
+                  <option value="name">ชื่อโครงการ ก–ฮ</option>
+                </select>
+              </label>
+              <button type="button" class="clear-button" id="clear-filters">ล้างตัวกรอง</button>
+            </div>
+          </div>
+          <div class="project-list" id="project-list" aria-live="polite" aria-busy="true">
+            <div class="loading-card"><span class="loading-dot"></span> กำลังอ่านทะเบียนโครงการ…</div>
+          </div>
+          <div class="list-end" id="list-end"></div>
+        </div>
+
+        <aside class="map-column" aria-label="แผนที่และรายละเอียด">
+          <div class="map-shell">
+            <div class="map-topline">
+              <div>
+                <p class="eyebrow eyebrow-dark">LOCATION INDEX <span>THAILAND</span></p>
+                <h2>แผนที่ตำแหน่ง</h2>
+              </div>
+              <button class="map-reset" type="button" id="map-reset" title="แสดงภาพรวมแผนที่">
+                <span aria-hidden="true">⤢</span> ภาพรวม
+              </button>
+            </div>
+            <div class="map-frame">
+              <div id="map" role="application" aria-label="แผนที่ตำแหน่งโครงการที่มีพิกัด"></div>
+              <div class="map-loading" id="map-loading">รอแผนที่…</div>
+              <div class="map-overlay-label">โครงการที่ปักตำแหน่งได้ <b id="map-point-count">—</b></div>
+            </div>
+            <div class="map-legend">
+              <span><i class="legend-dot legend-record"></i> พิกัดในระเบียน</span>
+              <span><i class="legend-dot legend-area"></i> ศูนย์กลางตำบล/อำเภอ/จังหวัด</span>
+              <span><i class="legend-dot legend-check"></i> พิกัดมีข้อควรระวัง</span>
+              <span class="legend-note">หมุดประมาณไม่ใช่พิกัดอาคาร</span>
+              <a class="legend-source" href="https://gis-portal.disaster.go.th/arcgis/rest/services/MapDX/DPM_TH_Boundary/FeatureServer/3" target="_blank" rel="noopener noreferrer">ที่มาจุดศูนย์กลาง: ปภ. ↗</a>
+            </div>
+          </div>
+
+          <section class="detail-card" id="detail-card" aria-live="polite">
+            <div class="detail-empty">
+              <span class="detail-number">02</span>
+              <p class="eyebrow eyebrow-dark">PROJECT FILE</p>
+              <h3>เลือกรายการเพื่อดูหลักฐาน</h3>
+              <p>กดการ์ดในทะเบียนหรือหมุดบนแผนที่เพื่อเปิดรายละเอียด งบประมาณ และลิงก์ต้นทาง</p>
+            </div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="method" id="about">
+        <div class="method-title">
+          <span class="method-no">03</span>
+          <p class="eyebrow eyebrow-dark">READ THE MAP</p>
+          <h2>หมุดไม่ใช่<br />คำตัดสิน</h2>
+        </div>
+        <div class="method-copy">
+          <p>แต่ละรายการมีระดับความเชื่อมั่นและแหล่งอ้างอิงไม่เท่ากัน คำว่า “ร้าง” ในข่าวอาจหมายถึงสร้างไม่เสร็จ ไม่เคยเปิด ใช้งานไม่เต็มที่ หรือเป็นทรัพย์สินที่ถูกสำรวจว่าไม่ได้ใช้ประโยชน์—เว็บจะแสดงสถานะจากระเบียนเดิม ไม่รวมทุกกรณีเป็นข้อสรุปเดียว</p>
+          <p>หมุดจากระเบียนและ e-GP แยกจากหมุดประมาณซึ่งเป็นศูนย์กลางพื้นที่ปกครอง ไม่ใช่ตำแหน่งอาคารหรือแปลงที่ดินจริง รายการไม่มี ID จะไม่แสดงในเว็บ แต่ยังเก็บไว้ในฐานต้นทาง ส่วนรถไฟ ยานพาหนะ/เรือ คดีล้วน ๆ เหตุอุบัติเหตุ และโครงการที่ไม่เคยเริ่มก่อสร้างจะไม่รวมในรายการหลัก</p>
+          <div class="method-caveat" id="trang-spacebar-review">
+            <p><strong>ยอดรวมเป็นข้อมูลตามช่วงเวลา ไม่ใช่จำนวนอาคารที่ยืนยันแล้ว:</strong> <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar (28 ธ.ค. 2567)</a> รายงาน 23 โครงการและวงเงินงบประมาณ 2,496 ล้านบาท; <a href="https://www.prd.go.th/th/content/category/detail/id/39/iid/365364" target="_blank" rel="noopener noreferrer">กรมประชาสัมพันธ์ (16 ก.พ. 2568)</a> รายงาน 23 โครงการ มูลค่ากว่า 2,496 ล้านบาท; <a href="https://www.thaipbs.or.th/news/content/352150" target="_blank" rel="noopener noreferrer">Thai PBS (15 พ.ค. 2568)</a> รายงาน 23 โครงการ วงเงินกว่า 2,095 ล้านบาท. ส่วน <a href="https://radiotrang.prd.go.th/th/content/category/detail/id/1592/iid/391101" target="_blank" rel="noopener noreferrer">สถานีวิทยุกรมประชาสัมพันธ์จังหวัดตรัง</a> รายงานการแถลงข่าววันที่ 21 พ.ค. (เผยแพร่ 22 พ.ค. 2568) ว่ามี 22 โครงการ. ยังไม่พบรายชื่อและวันตัดข้อมูลชุดเดียวกันเพื่อกระทบยอด. ข่าวจังหวัดยกตัวอย่างสถานะที่ต่างกัน เช่น ทรัพย์สินโซลาร์เซลล์ที่ส่งมอบแล้ว สถานีสูบน้ำที่อุปกรณ์ควบคุมสูญหายและรอตั้งงบซ่อม จุดชมวิวที่ยังขอใช้พื้นที่ และอาคารสนามบินที่มีผู้รับเหมารายใหม่—จึงไม่ใช่ทั้งหมดเป็นอาคารที่ยังร้าง. วงเงินที่รายงานไม่ใช่ยอดความเสียหายที่ตรวจสอบแล้วหรือจำนวนอาคาร; ผอ.ป.ป.ช.ตรังระบุในข่าว Spacebar ว่า ณ เวลานั้นยังไม่พบหลักฐานเจ้าหน้าที่รัฐทุจริต</p>
+            <p class="method-caveat-label">แฟ้มอาคาร 4 รายการที่เชื่อมโยงกับบทความได้ชัดเจน · สถานะทวนถึง 30 ก.ย. 2569 (ไม่ใช่ 4 แห่งที่ยังร้างหรือค้างก่อสร้างทั้งหมดในปัจจุบัน) กด ID เพื่อเปิดแฟ้มและตำแหน่ง</p>
+            <ul class="method-evidence-list">
+              <li class="method-evidence-card">
+                <div class="evidence-card-heading"><a class="project-reference-link" href="#directory" data-open-project="28"><strong>ID 28 · อาคารผู้โดยสารสนามบินตรัง</strong></a><span class="evidence-state evidence-resolved">เปิดใช้แล้ว · มีรายงานปัญหารั่ว/ซ่อม</span></div>
+                <figure class="evidence-context-image">
+                  <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer"><img src="https://www.spacebar.th/api/media/file/Construction_projects_in_Trang_have_been_abandoned_and_delayed_SPACEBAR_Photo11_ee9ae09e66.jpg" alt="ภาพในบทความ Spacebar ใกล้ข้อความเรื่องอาคารสนามบินตรัง; ไม่ยืนยันว่าเป็นอาคารผู้โดยสารหลังใหม่หรือสภาพปัจจุบัน" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" /></a>
+                  <figcaption><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">ภาพประกอบ Spacebar · 28 ธ.ค. 2567</a> — ภาพวางใกล้ย่อหน้าเท่านั้น ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน</figcaption>
+                </figure>
+                <p><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar (28 ธ.ค. 2567)</a> อ้างเครือข่ายว่าโครงการมีวงเงิน 1,068 ล้านบาทและเหลืองาน 34 ล้านบาทในงวดที่ 58; <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=62017310746&amp;year=2562" target="_blank" rel="noopener noreferrer">e-GP 62017310746</a> ระบุราคาที่ตกลง 1,070 ล้านบาท จึงแยกคำกล่าวออกจากราคาสัญญา. <a href="https://radiotrang.prd.go.th/th/content/category/detail/id/1592/iid/421244" target="_blank" rel="noopener noreferrer">จังหวัดรายงานเปิด Soft Opening 5 ก.ย. 2568</a>; <a href="https://www.posttoday.com/smart-city/738903" target="_blank" rel="noopener noreferrer">PostToday รายงานการเปิดใช้งานใน มี.ค. 2569</a>. หลังฝนหนัก 7 พ.ค. 2569 <a href="https://www.thaipbs.or.th/news/content/505671" target="_blank" rel="noopener noreferrer">Thai PBS (8 พ.ค.)</a> รายงานน้ำรั่วและการตรวจซ่อม ขณะที่ <a href="https://www.matichon.co.th/region/news_5714815" target="_blank" rel="noopener noreferrer">มติชน (12 พ.ค. 2569)</a> รายงานฝ้าเพดานรั่ว/พังหลายจุด รวมบริเวณทางออก 2 และร้านค้า; ร้านหนึ่งปิดชั่วคราว แต่สนามบินยังเปิดบริการตามปกติ. ข่าวระบุว่ากรมท่าอากาศยานกำลังสำรวจและซ่อม และมีการริบหลักประกันผู้รับเหมารายเดิม 53.5 ล้านบาท; สาเหตุและความรับผิดของผู้รับเหมารายใดต่อรอยรั่วซ้ำยังไม่ชี้ขาดในรายงานนั้น. จึงเป็นปัญหาซ่อมบำรุงของอาคารที่เปิดใช้ ไม่ใช่หลักฐานว่ากลับไปร้าง. ระเบียนนี้หมายถึงอาคารผู้โดยสาร ไม่รวมงานทางวิ่ง/ลานจอด</p>
+              </li>
+              <li class="method-evidence-card">
+                <div class="evidence-card-heading"><a class="project-reference-link" href="#directory" data-open-project="89"><strong>ID 89 · อาคารโรงเรียนเทศบาล 2</strong></a><span class="evidence-state evidence-pending">งานต่อยังไม่ยืนยัน</span></div>
+                <figure class="evidence-context-image">
+                  <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer"><img src="https://www.spacebar.th/api/media/file/Construction_projects_in_Trang_have_been_abandoned_and_delayed_SPACEBAR_Photo10_9122185e91.jpg" alt="ภาพในบทความ Spacebar ใกล้ข้อความเรื่องอาคารโรงเรียนเทศบาล 2; ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" /></a>
+                  <figcaption><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">ภาพประกอบ Spacebar · 28 ธ.ค. 2567</a> — ภาพวางใกล้ย่อหน้าเท่านั้น ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน</figcaption>
+                </figure>
+                <p><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar (28 ธ.ค. 2567)</a> ถ่ายทอดคำกล่าวของเครือข่ายว่าเริ่มก่อสร้างปี 2564 ตั้งเป้าเสร็จปี 2565 วงเงิน 72 ล้านบาท และผู้รับเหมาทิ้งงานตั้งแต่งวดแรก ๆ; <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=64047377736&amp;year=2564" target="_blank" rel="noopener noreferrer">GovSpending/e-GP 64047377736</a> ยืนยันอาคารอเนกประสงค์ 6 ชั้น สัญญา 24/2564 ราคาสัญญา 72.24 ล้านบาท (วงเงินโครงการ 84 ล้านบาท) ลงนาม 2 ส.ค. 2564 และกำหนดตามสัญญา 23 ก.ค. 2566—ต่างจากกำหนดปี 2565 ที่ข่าวถ่ายทอด. <a href="https://www.naewna.com/local/839276" target="_blank" rel="noopener noreferrer">แนวหน้า (4 พ.ย. 2567)</a> และ <a href="https://www.matichon.co.th/local/news_4876624" target="_blank" rel="noopener noreferrer">มติชน (1 พ.ย. 2567)</a> อ้างเจ้าหน้าที่เทศบาลว่าเทศบาลยกเลิกสัญญาเดิมเมื่อ 13 พ.ค. 2567. ต่อมา <a href="https://isranews.org/article/south-slide/139807-abandonedbuilding.html" target="_blank" rel="noopener noreferrer">อิศรา (19 ก.ค. 2568)</a> รายงานการประกวดราคางานอาคารเดิมอีกครั้ง วงเงิน 76,476,000 บาท. ตรวจ <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getProjectDetail?projectId=68079552951" target="_blank" rel="noopener noreferrer">Process5 68079552951 (ปีงบ 2568)</a> และ <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getProjectDetail?projectId=69049226963" target="_blank" rel="noopener noreferrer">69049226963 (ปีงบ 2569)</a> พบว่าทั้งสองชื่อเป็นงานปรับปรุงภูมิทัศน์ทางเข้าออกโรงเรียน ไม่ใช่อาคาร 6 ชั้น; จุดข้อมูลผลจัดซื้อ/สัญญาของทั้งสองประกาศใน Process5 ไม่แสดงผู้ชนะหรือข้อมูลสัญญา (<a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getProcureResult?projectId=68079552951" target="_blank" rel="noopener noreferrer">ผลจัดซื้อ 2568</a> · <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=68079552951" target="_blank" rel="noopener noreferrer">สัญญา 2568</a> · <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getProcureResult?projectId=69049226963" target="_blank" rel="noopener noreferrer">ผลจัดซื้อ 2569</a> · <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=69049226963" target="_blank" rel="noopener noreferrer">สัญญา 2569</a>). จึงยังไม่มีหลักฐานว่างานอาคาร 6 ชั้นกลับมาก่อสร้างหรือมีสัญญาทดแทน</p>
+              </li>
+              <li class="method-evidence-card">
+                <div class="evidence-card-heading"><a class="project-reference-link" href="#directory" data-open-project="112"><strong>ID 112 · อาคารผู้ป่วยนอก รพ.ศูนย์ตรัง</strong></a><span class="evidence-state evidence-active">ก่อสร้างต่อ · เป้าหมาย ม.ค. 2570</span></div>
+                <figure class="evidence-context-image">
+                  <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer"><img src="https://www.spacebar.th/api/media/file/Construction_projects_in_Trang_have_been_abandoned_and_delayed_SPACEBAR_Photo07_9ac03360d9.jpg" alt="ภาพในบทความ Spacebar ใกล้ข้อความเรื่องอาคารผู้ป่วยนอกโรงพยาบาลตรัง; ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" /></a>
+                  <figcaption><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">ภาพประกอบ Spacebar · 28 ธ.ค. 2567</a> — ภาพวางใกล้ย่อหน้าเท่านั้น ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน</figcaption>
+                </figure>
+                <p><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar (28 ธ.ค. 2567)</a> ถ่ายทอดคำกล่าวของเครือข่ายว่าเริ่มได้รับงบ 418 ล้านบาทตั้งแต่ปี 2555 และยังสร้างไม่เสร็จ; ตัวเลข 285 ล้านบาทสำหรับงานต่อและราคาประมูล 279 ล้านบาทในข่าวเป็นข้อมูลคาดหมาย ณ เวลานั้น. <a href="https://thainews.prd.go.th/regionnews/news/view/2055070/?bid=1" target="_blank" rel="noopener noreferrer">ข่าวทางการ 27 พ.ค. 2569</a> ระบุว่าก่อสร้างเดินหน้าต่อและตั้งเป้าเสร็จ ม.ค. 2570 พร้อมรายงานวงเงินเพิ่ม 284.8 ล้านบาท; ยังไม่ใช่หลักฐานว่าเปิดใช้แล้ว</p>
+              </li>
+              <li class="method-evidence-card">
+                <div class="evidence-card-heading"><a class="project-reference-link" href="#directory" data-open-project="267"><strong>ID 267 · อาคาร รพ.ส่งเสริมสุขภาพเทศบาลนครตรัง</strong></a><span class="evidence-state evidence-pending">มีผู้รับเหมารายใหม่ · ยังไม่ยืนยันว่าเสร็จ</span></div>
+                <figure class="evidence-context-image">
+                  <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer"><img src="https://www.spacebar.th/api/media/file/Construction_projects_in_Trang_have_been_abandoned_and_delayed_SPACEBAR_Photo04_cf5b207c61.jpg" alt="ภาพในบทความ Spacebar ใกล้ข้อความเรื่องอาคาร รพ.ส่งเสริมสุขภาพเทศบาลนครตรัง; ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" /></a>
+                  <figcaption><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">ภาพประกอบ Spacebar · 28 ธ.ค. 2567</a> — ภาพวางใกล้ย่อหน้าเท่านั้น ไม่ยืนยันว่าเป็นอาคารนี้หรือสภาพปัจจุบัน</figcaption>
+                </figure>
+                <p><a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">Spacebar (28 ธ.ค. 2567)</a> อ้างเครือข่ายว่าอาคารถูกทิ้งงานด้วยวงเงินราว 34 ล้านบาท; ตัวเลขนี้เป็นวงเงินที่ผู้ให้ข้อมูลระบุ ไม่ใช่ราคาสัญญาที่หน้า e-GP ยืนยัน. <a href="https://www.thaipost.net/district-news/481158/" target="_blank" rel="noopener noreferrer">ข่าว Thai Post</a> รายงานราคาสัญญา 34.95 ล้านบาทและงานคืบหน้า 6 จาก 11 งวด; <a href="https://mgronline.com/south/detail/9680000061949" target="_blank" rel="noopener noreferrer">MGR รายงาน 1 ก.ค. 2568</a> ว่าผู้รับเหมารายใหม่เข้าพื้นที่แล้ว แต่ยังไม่ยืนยันวันเสร็จหรือเปิดใช้</p>
+              </li>
+            </ul>
+            <p class="method-caveat-foot">บทความยังพูดถึง <a class="project-reference-link" href="#directory" data-open-project="117">จัตุรัสเมืองตรัง (ID 117)</a> ในฐานะงานล่าช้า โดยคาดว่าจะเสร็จ 28 มี.ค. 2568; ต่อมา <a href="https://www.thainewsonline.co/pr-news/news/885256" target="_blank" rel="noopener noreferrer">ข่าวประชาสัมพันธ์ที่ถ่ายทอดคำชี้แจงกรมโยธาธิการฯ (16 พ.ค. 2568)</a> ระบุว่างานตามสัญญาเสร็จแล้วภายใน 26 เม.ย. 2568. การติดตั้งสัญญาณไฟเป็นงานแยกของเทศบาลฯ ซึ่งในข่าวยังอยู่ระหว่างดำเนินการ; จัตุรัสจึงเป็นประวัติงานล่าช้าของพื้นที่สาธารณะ ไม่ใช่อาคารร้างปัจจุบัน. ส่วน <a href="https://www.spacebar.th/social/construction-projects-in-trang-have-been-abandoned-and-delayed" target="_blank" rel="noopener noreferrer">ท่าเรือบ้านนาเกลือ</a> ถูกกล่าวถึงเฉพาะประเด็นซื้อที่ดินแพง ไม่ได้ยืนยันว่าท่าเรือถูกทิ้งร้าง; ทั้งสองจึงไม่รวมใน 4 รายการอาคารข้างต้นหรือใช้เป็นหมุดอาคารร้าง</p>
+            <p class="method-caveat-label">กลุ่มอาคารเรียน 8 โรงเรียนในสังกัด อบจ.นครราชสีมา</p>
+            <p>ฐานมี ID 52 และ ID 230 เป็นระเบียนรวมของกลุ่มเดียวกัน ไม่ใช่อาคารเดียว ตาม <a href="https://www.isranews.org/article/isranews-scoop/113351-isranews9633-1000-476.html" target="_blank" rel="noopener noreferrer">อิศรา ลำดับที่ 19 (8 พ.ย. 2565)</a> ซึ่งถ่ายทอดข้อมูลจากเพจ “ต้องแฉ”; <a href="https://www.dailynews.co.th/news/1537227/" target="_blank" rel="noopener noreferrer">เดลินิวส์ (3 ต.ค. 2565)</a> ระบุว่าสัญญาเดิมถูกยกเลิก 13 โครงการ; ณ เวลารายงาน 5 โครงการสร้างเสร็จแล้วและอีก 8 โครงการยังค้าง พร้อมงบที่อนุมัติให้ทำงานต่อรวม 53,032,600 บาท—เป็นข้อมูลย้อนหลัง ไม่ใช่ยอดความเสียหายหรือสถานะปัจจุบัน</p>
+            <p>ตรวจ <a href="https://process5.gprocurement.go.th/" target="_blank" rel="noopener noreferrer">Process5/e-GP</a> เมื่อ 29 ก.ย. 2569 พบสัญญาปี 2566 ที่จับคู่กับโรงเรียนและแบบอาคารได้ 3 รายการ แต่เป็นการจัดจ้างภายหลังข่าว ไม่ใช่เลขสัญญาเดิม จึงใช้ยืนยันได้เฉพาะสถานะของสัญญาภายหลัง</p>
+            <ul class="korat-school-status">
+              <li><strong>สัญญาภายหลังระบุส่งงาน 2 แห่ง:</strong> โรงเรียนพระทองคำวิทยา—<a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=65117265806" target="_blank" rel="noopener noreferrer">Process5 เลข 65117265806</a> ระบุส่งงาน 11 ส.ค. 2566 และ <a href="https://www.koratpao.go.th/%E0%B8%9E%E0%B8%B4%E0%B8%98%E0%B8%B5%E0%B8%97%E0%B8%B3%E0%B8%9A%E0%B8%B8%E0%B8%8D%E0%B8%AD%E0%B8%B2%E0%B8%84%E0%B8%B2%E0%B8%A3%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99-%E0%B9%82%E0%B8%A3%E0%B8%87/" target="_blank" rel="noopener noreferrer">อบจ.รายงานเปิดอาคาร 27 ต.ค. 2566</a>; โรงเรียนหนองหว้าพิทยาสรรค์—<a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=65087530178" target="_blank" rel="noopener noreferrer">Process5 เลข 65087530178</a> ระบุส่งงาน 19 ต.ค. 2566 และมี <a href="https://project.koratpao.go.th/index.php?p=project-detail&amp;projectid=NjEwMQ%3D%3D" target="_blank" rel="noopener noreferrer">หน้าติดตามโครงการของ อบจ.</a>. หลักฐานนี้ยืนยันสถานะสัญญา/การเปิดอาคาร ณ เวลานั้น ไม่ได้ยืนยันการใช้ประจำในปัจจุบัน</li>
+              <li><strong>สัญญาถูกยกเลิก 1 แห่ง:</strong> สองครวิทยาคม—<a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=65087359120" target="_blank" rel="noopener noreferrer">Process5 เลข 65087359120</a> ระบุสถานะยกเลิกสัญญาและยึดหลักประกันแล้ว; ไม่มีวันส่งมอบในระเบียนนี้</li>
+              <li><strong>ประกวดราคาแล้วไม่มีผู้ยื่น 4 แห่ง:</strong> เมืองยางศึกษา, เฉลียงวิทยาคม, ปรางค์ทองวิทยา และดอนไพลวิทยาคม. <a href="https://infocenter.oic.go.th/FILEWEB/CABINFOCENTER56/DRAWER026/GENERAL/DATA0007/00007328.PDF" target="_blank" rel="noopener noreferrer">หนังสือตอบข้อหารือของกรมบัญชีกลาง (พ.ย. 2566)</a> บันทึกผลประกวดราคาใหม่ว่าไม่มีผู้ยื่นข้อเสนอ; ยังไม่ใช่หลักฐานว่าไม่มีการจัดจ้างต่อภายหลัง</li>
+              <li><strong>ยังตามสถานะอาคารเดิมไม่พบ:</strong> กุดจิกวิทยา. กิจกรรมหรือการซ่อมอาคารอื่นในโรงเรียนเดียวกันไม่นับเป็นหลักฐานว่าอาคารโครงการนี้เสร็จหรือเปิดใช้</li>
+            </ul>
+            <p class="method-caveat-foot">จึงไม่นำ ID 52/230 ไปวางเป็นหมุดเดียว: พิกัดรวมไม่ใช่ตำแหน่งอาคารทั้ง 8 แห่ง และยังไม่มีพิกัดรายโรงเรียนที่ยืนยันตัวอาคารครบชุด</p>
+            <p class="method-caveat-label">หมายเหตุแก้ตัวตน ID 78 · “7 ชั่วโคตร” จ.กาฬสินธุ์ (ไม่ใช่ถนน กช. จ.ขอนแก่น)</p>
+            <p><a href="https://www.audit.go.th/th/node/14823" target="_blank" rel="noopener noreferrer">สตง. (ก.ย. 2567)</a> ระบุกรณีจริงเป็นโครงการป้องกันน้ำท่วมของกรมโยธาธิการและผังเมือง 8 สัญญา—เขื่อนป้องกันตลิ่ง 7 แห่งและระบบระบายน้ำหลัก 1 งาน ใน อ.เมืองกาฬสินธุ์ อ.ฆ้องชัย และ อ.กมลาไสย. ข่าวระบุวงเงินโครงการรวม 545 ล้านบาท แต่ตัวเลขวงเงินทั้ง 8 รายการที่แจกแจงรวม 558.481 ล้านบาท (ยังไม่กระทบยอด); ยอดเบิกจ่ายรายโครงการรวม 252.9184 ล้านบาท ขณะที่ข่าวสรุปว่าราว 250 ล้านบาทรวมเงินล่วงหน้า. ทั้งหมดเป็นตัวเลขตามรายงาน ไม่ใช่ยอดความเสียหายสุทธิที่ตรวจสอบแล้ว. สตง.ระบุว่ายกเลิกสัญญาครบทั้ง 8 แล้ว แต่ปัจจุบันมีงานทดแทนบางส่วน จึงไม่ควรแสดงระเบียนรวมนี้เป็นอาคารร้างหรือหมุดเดียว</p>
+            <details class="method-kalasin-details">
+              <summary>ดู 8 สัญญาเดิมและสถานะงานทดแทนที่ตรวจพบ ณ 29 ก.ย. 2569</summary>
+              <ol class="kalasin-package-list">
+                <li>ซอยน้ำทิพย์ ริมแม่น้ำปาว, 937 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=64017569070&amp;year=2564" target="_blank" rel="noopener noreferrer">e-GP 64017569070</a>; ยกเลิกสัญญาเดิม. มีงานใกล้เคียง/อาจต่อเนื่อง <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=66037302389" target="_blank" rel="noopener noreferrer">เลข 66037302389</a> แต่ยังไม่ยืนยันว่าแนวงานทับซ้อนกัน: PRD รายงานคืบหน้า 84.41% เมื่อ 23 ก.ค. 2568 แต่ Process5 ระบุส่งงานวันที่ 30 เม.ย. 2568 ตามเวลาไทย (ค่าดิบ 29 เม.ย. 17:00 UTC) จึงยังไม่สรุปสถานะ</li>
+                <li>หน้าวัดใต้โพธิ์ค้ำ ริมแม่น้ำปาว, 1,141 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=62067027537&amp;year=2562" target="_blank" rel="noopener noreferrer">e-GP 62067027537</a>; ยกเลิกสัญญาเดิม ยังไม่พบสัญญาทดแทนที่ยืนยันได้</li>
+                <li>วัดใหม่สามัคคี ริมแม่น้ำชี, 423 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=63077064313&amp;year=2563" target="_blank" rel="noopener noreferrer">e-GP 63077064313</a>; งานทดแทน <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=68069346991" target="_blank" rel="noopener noreferrer">เลข 68069346991</a> ทำสัญญาแล้ว กำหนดเริ่ม 2 ต.ค. 2569 (ยังไม่เริ่ม ณ วันตรวจ)</li>
+                <li>วัดลำชีศรีวนาราม ริมแม่น้ำชี ระยะที่ 2, 385 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=63067281337&amp;year=2563" target="_blank" rel="noopener noreferrer">e-GP 63067281337</a>; งานทดแทน <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=68069346130" target="_blank" rel="noopener noreferrer">เลข 68069346130</a> ทำสัญญาแล้ว กำหนดเริ่ม 2 ต.ค. 2569 (ยังไม่เริ่ม ณ วันตรวจ)</li>
+                <li>หลังเทศบาลตำบลลำพาน บ้านวังยูง ริมลำพาน, 526 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=64037311968&amp;year=2564" target="_blank" rel="noopener noreferrer">e-GP 64037311968</a>; ข่าวภาคสนาม ก.ค. 2568 ระบุว่ายังไม่มีผู้รับเหมารายใหม่และงานเดิมทรุดโทรม (<a href="https://siamrath.co.th/n/635723" target="_blank" rel="noopener noreferrer">สยามรัฐ</a>); ยังไม่พบหลักฐานสถานะพื้นที่ที่ใหม่กว่านั้น</li>
+                <li>ระบบระบายน้ำหลักเมืองกาฬสินธุ์ — สตง.ระบุวงเงินเดิม 148.2 ล้านบาท; ยังไม่ยืนยันเลข e-GP เดิม. งานทดแทน <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=67099446380" target="_blank" rel="noopener noreferrer">เลข 67099446380</a> มีสถานะส่งงานครบถ้วน และมี <a href="https://www.naewna.com/local/904690" target="_blank" rel="noopener noreferrer">รายงานข่าวว่างานแล้วเสร็จ ส.ค. 2568</a>—ไม่ใช่โครงการที่ยังร้างในปัจจุบัน</li>
+                <li>แก่งดอนกลาง ริมแม่น้ำปาว, 583 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=65047376355&amp;year=2565" target="_blank" rel="noopener noreferrer">e-GP 65047376355</a>; งานทดแทน <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=68069351524" target="_blank" rel="noopener noreferrer">เลข 68069351524</a> ทำสัญญาแล้ว กำหนดเริ่ม 7 ต.ค. 2569 (ยังไม่เริ่ม ณ วันตรวจ)</li>
+                <li>บ้านหนองหวาย–หนองคล้า ต.ลำชี, 300 ม. — <a href="https://api-govspending.data.go.th/api/get/egp/project_detail?project_id=65067204225&amp;year=2565" target="_blank" rel="noopener noreferrer">e-GP 65067204225</a>; งานทดแทน <a href="https://process5.gprocurement.go.th/egp-oann10-service/pb/a-egp-allt-project/announcement/getContractAvailable?projectId=68059244837" target="_blank" rel="noopener noreferrer">เลข 68059244837</a> มีกำหนดสัญญาถึง มี.ค. 2570 แต่ยังไม่ยืนยันความคืบหน้าหน้างาน</li>
+              </ol>
+              <p class="method-caveat-foot">เลข e-GP เดิมจับคู่จากชื่อสถานที่ หน่วยงาน และความยาวที่ตรงกับรายงาน สตง.; งานทดแทนเป็นคนละสัญญาและไม่ควรรวมเป็นเลขเดียวกัน. หมายเหตุนี้เป็นแฟ้มหลักฐาน ไม่ใช่หมุดแผนที่หรือข้อสรุปคดี</p>
+            </details>
+            <details class="method-review-details">
+              <summary>เบาะแสที่ยังไม่แสดงบนแผนที่ · ID 74 “โรงไฟฟ้าขยะ 5 แห่ง” จ.นครราชสีมา</summary>
+              <p><a href="https://www.thaipbs.or.th/program/clip/watch/eXuBRq" target="_blank" rel="noopener noreferrer">Thai PBS (4 เม.ย. 2568)</a> รายงานว่าโครงการก่อสร้าง 5 แห่งสะดุดจากเสียงคัดค้านและข้อพิพาท; <a href="https://www.thaipbs.or.th/program/KeepAround/episodes/117210" target="_blank" rel="noopener noreferrer">รายการ 20 ส.ค. 2569</a> สำรวจสถานะของ 5 โครงการตามแผน. แหล่งเหล่านี้ไม่ได้ยืนยันว่ามีโรงไฟฟ้า 5 แห่งสร้างเสร็จแล้วถูกทิ้งร้าง. แยกจากกัน <a href="https://mgronline.com/local/detail/9680000089397" target="_blank" rel="noopener noreferrer">MGR (18 ก.ย. 2568)</a> กล่าวถึงโรงไฟฟ้าชีวภาพเดิมในโซน A.1 ซึ่งยังอยู่ระหว่างพิจารณาว่าจะดำเนินต่อหรือยุติ และบรรยายระบบจัดการขยะที่ผลิตปุ๋ย/ไฟฟ้า; ต่อมา <a href="https://nakhonratchasima.prd.go.th/th/content/category/detail/id/33/iid/469193" target="_blank" rel="noopener noreferrer">กรมประชาสัมพันธ์ (25 ม.ค. 2569)</a> ระบุว่ามีโรงไฟฟ้าขยะเดิมหยุดผลิตและมีแผนรื้อถอน ขณะที่โรงไฟฟ้าใหม่เกือบ 2,000 ล้านบาทยังไม่ได้เริ่มก่อสร้างเพราะข้อร้องเรียนและคดีปกครอง. ต้องตามชื่อทรัพย์สิน สัญญา ตำแหน่ง และสถานะรื้อถอนของโรงไฟฟ้าเดิมแยกต่างหาก; จึงยังไม่นับหรือปักหมุด ID 74 เป็น 5 อาคาร</p>
+            </details>
+          </div>
+          <a href="https://github.com/luengnat/abandon_buildings#readme" class="method-link">อ่านวิธีเก็บข้อมูลและเกณฑ์หลักฐาน <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="method-side">แหล่งภาพมีเครดิต<br />และลิงก์กลับไปยังผู้เผยแพร่</div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span class="footer-brand">รอยต่อ / PUBLIC ASSET WATCH</span>
+      <span>แผนที่นี้เป็นเครื่องมือค้นข้อมูล ไม่ใช่การยืนยันความผิดหรือการประเมินความเสียหาย</span>
+      <a href="./database.json">เปิดข้อมูลต้นทาง <span aria-hidden="true">↗</span></a>
+    </footer>
+
+    <noscript>เว็บไซต์นี้ต้องเปิดใช้ JavaScript เพื่อค้นและแสดงข้อมูลจากฐานทะเบียน</noscript>
+  </body>
+</html>
